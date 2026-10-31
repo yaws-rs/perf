@@ -12,6 +12,15 @@ fn criterion_benchmark_decode(c: &mut Criterion) {
             yaws_perf::ab_tls_driver::teapot(yaws_perf::ab_rustls::init_server(), black_box(None));
         })
     });
+
+    c.bench_function("Speed of Rick Rolls", |b| {
+        b.iter(|| {
+            yaws_perf::ab_h11spec_driver::h11rick(
+                yaws_perf::ab_h11spec::init_server(),
+                black_box(None),
+            );
+        })
+    });
 }
 
 criterion_group!(benches, criterion_benchmark_decode);

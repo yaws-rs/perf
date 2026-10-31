@@ -65,6 +65,7 @@ pub use ab_failures::*;
 //***********************************************
 // TLS Under Test - Represented through Orbits
 //***********************************************
+pub mod ab_h11spec;
 pub mod ab_rustls;
 pub mod ab_ytls;
 
@@ -74,3 +75,10 @@ pub mod ab_ytls;
 pub mod ab_tls_driver;
 #[doc(inline)]
 pub use ab_tls_driver::*;
+
+//***********************************************
+// A/B H11Spec Tester Driver
+//***********************************************
+pub mod ab_h11spec_driver;
+#[doc(inline)]
+pub use ab_h11spec_driver::*;

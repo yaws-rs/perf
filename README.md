@@ -10,7 +10,7 @@ curl --output /tmp/rick-roll.gif https://media.tenor.com/Lw4_T2lRPGoAAAAM/rickro
 ```
 
 Make test certificates for TLS
-```
+```ignore
 cd test_certs
 make prime256v1
 cd ..
