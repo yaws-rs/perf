@@ -12,12 +12,17 @@ categories = ["science"]
 
 [dependencies]
 blueprint = { version = "0.2.0", default-features = false }
+
 ## Released Blueprints
 blueprint-ytls = { version = "0.0.1", default-features = false, features = ["server", "zeroize"] }
 blueprint-rustls = { version = "0.0.1", default-features = false, features = ["std", "util"] }
+blueprint-h11spec = { version = "0.0.6", default-features = false, features = ["h11server"] }
 ## Local Blueprints (clone to ../tls from yaws/tls)
 #blueprint-ytls = { path = "../tls/ytls-blueprint", version = "0.0.1", default-features = false, features = ["server", "zeroize"] }
 #blueprint-rustls = { path = "../tls/rustls-blueprint", version = "0.0.1", default-features = false, features = ["std", "util"] }
+#blueprint-h11spec = { path = "../blueprint", version = "0.0.6", default-features = false, features = ["h11server"] }
+
+yaws-app-rick-roll = { version = "0.0.6", default-features = false }
 ytls-rustcrypto = { version = "0.0.3" }
 rand = { version = "0.10", default-features = false, features = ["thread_rng"] }
 pem-rfc7468 = { version = "1", default-features = false, features = ["alloc"] }

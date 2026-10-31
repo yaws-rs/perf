@@ -17,6 +17,7 @@ impl<O> TestingCtx<O>
 where
     O: Orbit,
 {
+    #[inline]
     pub fn new(orbit: O) -> Self {
         let mut ctx = TestingCtx {
             o: orbit,

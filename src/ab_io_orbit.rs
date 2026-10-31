@@ -18,7 +18,7 @@ pub struct AbIoLeft {
 }
 
 impl AbIoLeft {
-    pub fn copy_in(&mut self, buf: &mut [u8]) -> usize {
+    pub fn copy_in(&mut self, buf: &[u8]) -> usize {
         self.in_bytes.extend_from_slice(buf);
         self.in_bytes_len += buf.len();
         buf.len()
