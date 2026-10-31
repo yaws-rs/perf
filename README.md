@@ -2,6 +2,20 @@
 
 Benchmarks to run self-tested YAWS isolated state machines and composed pipelines without I/O
 
+## Preparation
+
+Obtain Rick used in testing
+```ignore
+curl --output /tmp/rick-roll.gif https://media.tenor.com/Lw4_T2lRPGoAAAAM/rickroll-meme.gif
+```
+
+Make test certificates for TLS
+```
+cd test_certs
+make prime256v1
+cd ..
+```
+
 ## Self-test
 
 ```ignore
