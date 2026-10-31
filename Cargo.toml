@@ -1,0 +1,41 @@
+[package]
+name = "yaws-perf"
+version = "0.0.1"
+edition = "2021"
+description = "h11spec core types"
+homepage = "https://github.com/yaws-rs/perf"
+keywords = ["io", "uring", "epoll", "async"]
+license = "Apache-2.0/MIT"
+readme = "README.md"
+repository = "https://github.com/yaws-rs/perf"
+categories = ["science"]
+
+[dependencies]
+blueprint = { version = "0.2.0", default-features = false }
+## Released Blueprints
+blueprint-ytls = { version = "0.0.1", default-features = false, features = ["server", "zeroize"] }
+blueprint-rustls = { version = "0.0.1", default-features = false, features = ["std", "util"] }
+## Local Blueprints (clone to ../tls from yaws/tls)
+#blueprint-ytls = { path = "../tls/ytls-blueprint", version = "0.0.1", default-features = false, features = ["server", "zeroize"] }
+#blueprint-rustls = { path = "../tls/rustls-blueprint", version = "0.0.1", default-features = false, features = ["std", "util"] }
+ytls-rustcrypto = { version = "0.0.3" }
+rand = { version = "0.10", default-features = false, features = ["thread_rng"] }
+pem-rfc7468 = { version = "1", default-features = false, features = ["alloc"] }
+sec1 = { version = "0.8", default-features = false }
+openssl = { version = "0.10" }
+
+
+[dev-dependencies]
+insta = { version = "1.47" }
+rstest = { version = "0.26" }
+criterion = { version = "0.5" }
+
+[features]
+
+[package.metadata.docs.rs]
+features = [""]
+
+[[bench]]
+name = "bencher"
+required-features = []
+harness = false
