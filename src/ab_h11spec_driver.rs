@@ -38,7 +38,7 @@ pub fn h11rick(ctx: impl Orbit, exp_failure: Option<ExpectedFailure>) {
     let start = String::from_utf8_lossy(&test_ctx.l.out_bytes[0..43]);
     // We should have Rick's response back for the HTTP Layer as follows
 
-    const EXPECT_RESP: &'static str = "HTTP/1.1 200 OK\r\nContent-Length: 264071\r\n\r\n";
+    const EXPECT_RESP: &'static str = "HTTP/1.1 200 OK\r\nContent-Length: 461688\r\n\r\n";
 
     assert_eq!(EXPECT_RESP, start);
 
