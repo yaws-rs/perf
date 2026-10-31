@@ -1,6 +1,6 @@
 # perf
 
-Benchmarks to run YAWS pipelines without I/O
+Benchmarks to run self-tested YAWS isolated state machines and composed pipelines without I/O
 
 ## Run
 
