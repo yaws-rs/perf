@@ -6,8 +6,8 @@ use std::collections::VecDeque;
 /// A/B I/O Left side
 #[derive(Default)]
 pub struct AbIoLeft {
-    in_bytes: Vec<u8>,
-    in_bytes_len: usize,
+    pub in_bytes: Vec<u8>,
+    pub in_bytes_len: usize,
     pub out_bytes: Vec<u8>,
     pub out_bytes_len: usize,
     blocked: bool,
@@ -49,8 +49,13 @@ impl Left for AbIoLeft {
             self.in_bytes_len = new_len_in;
         }
         if new_len_out < cur_len_out {
-            let cut_off = cur_len_out - new_len_out;
-            self.out_bytes = self.out_bytes.split_off(cut_off);
+            let orig_capacity = self.out_bytes.capacity();
+
+            let take_start = cur_len_out - new_len_out;
+            let take_end = cur_len_out;
+            let mut out_bytes_new = vec![0; self.out_bytes.capacity()];
+            out_bytes_new[0..new_len_out].copy_from_slice(&self.out_bytes[take_start..take_end]);
+            self.out_bytes = out_bytes_new;
             self.out_bytes_len = new_len_out;
         }
         if new_len_in > cur_len_in {
@@ -98,13 +103,27 @@ impl Left for AbIoLeft {
 }
 
 /// A/B I/O Right side
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct AbIoRight {
     pub in_bytes: Vec<u8>,
     pub in_bytes_len: usize,
-    out_bytes: Vec<u8>,
-    out_bytes_len: usize,
+    pub out_bytes: Vec<u8>,
+    pub out_bytes_len: usize,
     want_right_next_in: bool,
+
+    // Right as Left
+    want_read: bool,
+    want_write: bool,
+    shutdown: bool,
+    ready: bool,
+    blocked: bool,
+}
+
+impl AbIoRight {
+    /// Provide the Right as reflected Left side for the next layer
+    pub fn impl_left_mut(&mut self) -> impl Left + use<'_> {
+        self
+    }
 }
 
 impl Right for AbIoRight {
@@ -138,5 +157,82 @@ impl Right for AbIoRight {
     fn add_right_in(&mut self, new_data: &[u8]) -> () {
         self.in_bytes.extend_from_slice(new_data);
         self.in_bytes_len += new_data.len();
+    }
+}
+
+impl Left for &mut AbIoRight {
+    /// Is Left in blocked?
+    fn left_in_blocked(&self) -> bool {
+        self.blocked
+    }
+    /// Set Left in blocked
+    fn set_left_in_blocked(&mut self, b: bool) {
+        self.blocked = b;
+    }
+    /// Lengths of Input and Output of Left side
+    fn left_lens(&self) -> (usize, usize) {
+        (self.in_bytes_len, self.out_bytes_len)
+    }
+    /// Set the Lengths of Input and Output of Left side
+    fn left_set_lens(&mut self, new_len_in: usize, new_len_out: usize) -> () {
+        let (cur_len_in, cur_len_out) = self.left_lens();
+
+        if new_len_in < cur_len_in {
+            let cut_off = cur_len_in - new_len_in;
+
+            self.in_bytes = self.in_bytes.split_off(cut_off);
+            self.in_bytes_len = new_len_in;
+        }
+        if new_len_out < cur_len_out {
+            let orig_capacity = self.out_bytes.capacity();
+
+            let take_start = cur_len_out - new_len_out;
+            let take_end = cur_len_out;
+            let mut out_bytes_new = vec![0; self.out_bytes.capacity()];
+            out_bytes_new[0..new_len_out].copy_from_slice(&self.out_bytes[take_start..take_end]);
+            self.out_bytes = out_bytes_new;
+            self.out_bytes_len = new_len_out;
+        }
+        if new_len_in > cur_len_in {
+            self.in_bytes_len = new_len_in;
+        }
+        if new_len_out > cur_len_out {
+            self.out_bytes_len = new_len_out;
+        }
+    }
+    /// Mutable Input and Output bufs of Left side
+    fn left_bufs_mut<'d>(&'d mut self) -> (InBuffer<'d>, &'d mut [u8]) {
+        let b_buf_in = &mut self.in_bytes[..self.in_bytes_len];
+        let b_buf_out = &mut self.out_bytes;
+        (InBuffer::Single(b_buf_in), b_buf_out)
+    }
+    /// Indicates whether the Left side is ready for Right side
+    fn is_ready(&self) -> bool {
+        self.ready
+    }
+    /// Set the layer readiness for Right side input and output
+    fn set_ready(&mut self, r: bool) -> bool {
+        self.ready = r;
+        self.ready
+    }
+    /// Indicates whether the Left side wants Input
+    fn left_want_read(&self) -> bool {
+        self.want_read
+    }
+    /// Set the Left side wanting to read
+    fn set_left_want_read(&mut self, r: bool) -> () {
+        self.want_read = r;
+    }
+    /// Indicates whether the Left side wants Output
+    fn left_want_write(&self) -> bool {
+        self.want_write
+    }
+    /// Set the Left side wanting to write
+    fn set_left_want_write(&mut self, w: bool) -> () {
+        self.want_write = w;
+    }
+    /// State machine signals shutdown (e.g. peer signals close)
+    fn shutdown(&mut self) -> () {
+        self.shutdown = true;
     }
 }

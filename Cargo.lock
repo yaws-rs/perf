@@ -141,9 +141,9 @@ dependencies = [
 
 [[package]]
 name = "blueprint-rustls"
-version = "0.0.1"
+version = "0.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b32086939bd17021edbdd60fd505bc36947aaba9f76e1ae7ef5bf5766360b63e"
+checksum = "8ee9d6126e0829568799bb457fc3cc6255d7e496f67e28a2c8ceab7070a51748"
 dependencies = [
  "blueprint",
  "pem-rfc7468 0.7.0",
@@ -883,9 +883,9 @@ checksum = "e4eba85ea1d0a966a983acd07deee566e67395d2d96b6fb39e62b5a833f1eb0b"
 
 [[package]]
 name = "graviola"
-version = "0.4.2"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ceed5ad5e9637af6fbc9de8734d9c6014ceacf3d8c5736e8eafa72d839fa0ac"
+checksum = "f0b1b23c921e2b08241ad0d705659d3bfe942c6aac90bd94008652198f650def"
 dependencies = [
  "cfg-if",
  "getrandom 0.4.3",
