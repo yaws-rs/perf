@@ -53,7 +53,8 @@ pub use ab_io_std::*;
 //***********************************************
 // I/O Injector upon std Read call <> Orbit
 //***********************************************
-pub mod ab_injector;
+pub mod ab_injector; // Single Orbit
+pub mod ab_two_injector; // Two Orbits
 
 //***********************************************
 // Expected failure modes
@@ -65,20 +66,37 @@ pub use ab_failures::*;
 //***********************************************
 // TLS Under Test - Represented through Orbits
 //***********************************************
-pub mod ab_h11spec;
 pub mod ab_rustls;
 pub mod ab_ytls;
 
 //***********************************************
-// A/B TLS Tester Driver
+// H1Spec Under Test - Represented through Orbits
+//***********************************************
+pub mod ab_h11spec;
+
+//***********************************************
+// 2-Orbit TLS + H11Spec Composition Under Test
+//***********************************************
+pub mod ab_c_rustls_h11spec;
+pub mod ab_c_ytls_h11spec;
+
+//***********************************************
+// A/B TLS Orbit Tester Driver
 //***********************************************
 pub mod ab_tls_driver;
 #[doc(inline)]
 pub use ab_tls_driver::*;
 
 //***********************************************
-// A/B H11Spec Tester Driver
+// A/B H11Spec Orbit Tester Driver
 //***********************************************
 pub mod ab_h11spec_driver;
 #[doc(inline)]
 pub use ab_h11spec_driver::*;
+
+//***********************************************
+// A/B TLS+H11Spec 2-Orbits (Composition) Driver
+//***********************************************
+pub mod ab_c_tls_h11spec_driver;
+#[doc(inline)]
+pub use ab_c_tls_h11spec_driver::*;

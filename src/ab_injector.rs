@@ -13,6 +13,7 @@ pub(crate) fn ab_read_injector<O: Orbit>(
     u.l.copy_in(to_server);
 
     struct User;
+
     let r = u.o.advance_with(&mut User, &mut u.l, &mut u.r);
 
     let (l_pending_in, l_pending_out) = u.l.left_lens();
@@ -39,16 +40,10 @@ pub(crate) fn ab_read_injector<O: Orbit>(
         let send_out = b"418 I'm a teapot\r\n\r\n";
 
         u.r.add_right_out(send_out);
+
         let r = u.o.advance_with(&mut User, &mut u.l, &mut u.r);
 
         let (l_pending_in, l_pending_out) = u.l.left_lens();
-
-        /*
-            println!(
-                "After App left pending in/{} out/{}",
-                l_pending_in, l_pending_out
-        );
-            */
     }
 
     let (l_pending_in, l_pending_out) = u.l.left_lens();

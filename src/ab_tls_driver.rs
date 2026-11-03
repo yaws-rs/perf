@@ -85,7 +85,7 @@ fn teapot_ytls() {
 #[should_panic = "certificate verify failed"]
 fn teapot_rustls_cert_verify_failed() {
     let fail = Some(ExpectedFailure::ServerCertVerifyFailed);
-    teapot(crate::ab_ytls::init_server(), fail);
+    teapot(crate::ab_rustls::init_server(), fail);
 }
 
 #[test]
@@ -99,7 +99,7 @@ fn teapot_ytls_cert_verify_failed() {
 #[should_panic = "unexpected response"]
 fn teapot_rustls_teapot_not_a_teapot() {
     let fail = Some(ExpectedFailure::ItsNotATeapot);
-    teapot(crate::ab_ytls::init_server(), fail);
+    teapot(crate::ab_rustls::init_server(), fail);
 }
 
 #[test]
