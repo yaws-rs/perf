@@ -145,7 +145,7 @@ impl Right for AbIoRight {
     }
     /// SM: Called when all Right side Output was consumed
     fn all_sent_right_out(&mut self) -> () {
-        self.out_bytes = vec![];
+        self.out_bytes = vec![0; self.out_bytes.capacity()];
         self.out_bytes_len = 0;
     }
     /// Add bytes to Right output

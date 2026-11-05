@@ -6,7 +6,7 @@ use crate::AbStream;
 use crate::TwoTestingCtx;
 use crate::{AbIoLeft, AbIoRight};
 
-use openssl::ssl::{SslConnector, SslMethod};
+use openssl::ssl::{SslConnector, SslMethod, SslStream};
 
 #[test]
 fn init_c_ytls_h11spec() {
@@ -21,6 +21,7 @@ fn init_c_rustls_h11spec() {
 use crate::ExpectedFailure;
 
 /// Trigger a Rick Roll testing with composition
+#[inline]
 pub fn c_rickroll(ctx: (impl Orbit, impl Orbit), exp_failure: Option<ExpectedFailure>) {
     let test_ctx = TwoTestingCtx::new(ctx);
 
@@ -60,15 +61,37 @@ pub fn c_rickroll(ctx: (impl Orbit, impl Orbit), exp_failure: Option<ExpectedFai
         .write_all(b"GET / HTTP/1.1\r\nHost: test.rustcryp.to\r\n\r\n")
         .unwrap();
 
-    let mut app_recvd: Vec<u8> = vec![0; 1024];
-
+    let mut app_recvd: Vec<u8> = vec![0; 8192];
     let bytes_in = ssl_stream.read(&mut app_recvd).unwrap();
 
     let response = core::str::from_utf8(&app_recvd[..49]);
-
     let expected_response = "HTTP/1.1 200 OK\r\nContent-Length: 461688\r\n\r\nGIF89a";
 
     assert_eq!(response, Ok(expected_response), "unexpected response");
+
+    let mut rick_body: Vec<u8> = Vec::with_capacity(461688);
+
+    rick_body.extend(&app_recvd[43..bytes_in]);
+
+    let consumed_expect = rick_body.capacity();
+
+    loop {
+        let mut app_recvd: Vec<u8> = vec![0; 8192];
+        let bytes_in = ssl_stream.read(&mut app_recvd).unwrap();
+
+        if rick_body.len() + bytes_in > consumed_expect {
+            panic!(
+                "Overflow of {} bytes on expected response read.",
+                (rick_body.len() + bytes_in) - consumed_expect
+            );
+        }
+
+        rick_body.extend(&app_recvd[0..bytes_in]);
+
+        if rick_body.len() == consumed_expect {
+            break;
+        }
+    }
 }
 
 #[test]

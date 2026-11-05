@@ -59,6 +59,7 @@ pub(crate) fn ab_read_injector_two<First: Orbit, Second: Orbit>(
 
         if l_lens.1 == 0 {
             let r = u.o1.advance_with(&mut User, &mut u.l, &mut u.r);
+            u.r.all_sent_right_out();
         }
     }
 
