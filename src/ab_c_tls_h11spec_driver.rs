@@ -20,6 +20,9 @@ fn init_c_rustls_h11spec() {
 
 use crate::ExpectedFailure;
 
+#[cfg(test)]
+use sha2::{Digest, Sha256};
+
 /// Trigger a Rick Roll testing with composition
 #[inline]
 pub fn c_rickroll(ctx: (impl Orbit, impl Orbit), exp_failure: Option<ExpectedFailure>) {
@@ -91,6 +94,16 @@ pub fn c_rickroll(ctx: (impl Orbit, impl Orbit), exp_failure: Option<ExpectedFai
         if rick_body.len() == consumed_expect {
             break;
         }
+    }
+    #[cfg(test)]
+    {
+        let mut hasher = Sha256::new();
+        hasher.update(&rick_body);
+        let hash_res: [u8; 32] = hasher.finalize().into();
+        assert_eq!(
+            "fdc13b667283d0462e57a54b08ad739486dbc9f32e789f05b2807154a92f028b",
+            hex::encode(hash_res),
+        );
     }
 }
 
